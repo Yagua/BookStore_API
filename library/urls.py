@@ -10,6 +10,9 @@ books_urls = [
 categories_urls = [
 ]
 
+authors_urls = [
+]
+
 urlpatterns = [
     path("books/", include(books_urls)),
     path("categories/", include(categories_urls)),

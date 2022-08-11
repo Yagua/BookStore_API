@@ -1,0 +1,19 @@
+### Get all Books
+
+GET http://localhost:8000/api/v1/books/
+
+### Get an specific book
+
+GET http://localhost:8000/api/v1/books/1/
+
+### Change partially a book
+
+PATCH http://localhost:8000/api/v1/books/1/
+Content-type: application/json
+
+{
+  "title": "Python The Hard Way",
+  "description": "The book 'The Python The Hard Way is a book to learn python"
+}
+
+GET https://reqres.in/api/users/1
