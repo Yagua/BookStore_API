@@ -1,29 +1,6 @@
 from rest_framework import serializers
 from core.models import Book, Category, Author
 
-class BookSerializer(serializers.ModelSerializer):
-    """
-    BookSerializer class for Book model
-    """
-
-    class Meta:
-        model = Book
-        fields = (
-            "id",
-            "title",
-            "description",
-            "cover",
-            "edition",
-            "language",
-            "page_number",
-            "publishier",
-            "rating",
-            "available",
-            "categories",
-            "authors",
-            "time_stamp",
-        )
-
 
 class CategorySerializer(serializers.ModelSerializer):
     """
@@ -50,5 +27,56 @@ class AuthorSerializer(serializers.ModelSerializer):
             "picture",
             "country",
             "books",
-            "time_stamp"
+            "time_stamp",
         )
+        extra_kwargs = {
+            "maternal_last_name": {"required": False},
+            "second_name": {"required": False},
+            "books": {"required": False},
+        }
+
+
+class BookSerializer(serializers.ModelSerializer):
+    """
+    BookSerializer class for Book model
+    """
+
+    categories = CategorySerializer(many=True)
+    authors = AuthorSerializer(many=True)
+
+    class Meta:
+        model = Book
+        fields = (
+            "id",
+            "title",
+            "description",
+            "cover",
+            "edition",
+            "language",
+            "page_number",
+            "publishier",
+            "rating",
+            "available",
+            "categories",
+            "authors",
+            "time_stamp",
+        )
+        extra_kwargs = {
+            "authors": {"required": False},
+            "categories": {"required": False}
+        }
+
+    def create(self, validated_data: dict):
+        authors = validated_data.pop("authors")
+        categories = validated_data.pop("categories")
+        book = Book.objects.create(**validated_data)
+
+        for author in authors:
+            new_author = Author.objects.create(**author)
+            new_author.books.add(book)
+
+        for category in categories:
+            new_category = Category.objects.create(**category)
+            new_category.books.add(book)
+
+        return book

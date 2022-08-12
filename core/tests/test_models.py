@@ -27,7 +27,7 @@ class UserModelTestCase(TestCase):
             email=email,
             password=password,
             first_name=first_name,
-            paternal_last_name=paternal_last_name
+            paternal_last_name=paternal_last_name,
         )
 
         self.assertEquals(user.username, username)
@@ -61,7 +61,7 @@ class UserModelTestCase(TestCase):
                 email=email,
                 password=password,
                 first_name=first_name,
-                paternal_last_name=paternal_last_name
+                paternal_last_name=paternal_last_name,
             )
 
     def test_user_email_is_normalized(self):
@@ -72,11 +72,11 @@ class UserModelTestCase(TestCase):
         User = get_user_model()
         email = "test@Normalization.com"
         user = User.objects.create_user(
-          username="username",
-          first_name="user_test",
-          paternal_last_name="paternal_last_name_test",
-          password="passwd",
-          email=email
+            username="username",
+            first_name="user_test",
+            paternal_last_name="paternal_last_name_test",
+            password="passwd",
+            email=email,
         )
         self.assertEqual(user.email, email.lower())
 
@@ -86,7 +86,7 @@ class UserModelTestCase(TestCase):
         """
 
         User = get_user_model()
-        username="test_user_name"
+        username = "test_user_name"
         user = User(username=username)
         self.assertEqual(str(user), username)
 
@@ -101,7 +101,7 @@ class UserModelTestCase(TestCase):
             "first_name": "Axel",
             "second_name": "Alberto",
             "paternal_last_name": "Mora",
-            "maternal_last_name": "Rico"
+            "maternal_last_name": "Rico",
         }
         fullname = " ".join(user_attrs.values())
         user = User(**user_attrs)
@@ -161,6 +161,7 @@ class CategoryModelTestCase(TestCase):
 
         self.assertEqual(str(category), category_name)
 
+
 class BookModelTestCase(TestCase):
     """
     Book model tests
@@ -208,10 +209,7 @@ class BookModelTestCase(TestCase):
         description = "Python book"
 
         with self.assertRaises(utils.DataError):
-            book = models.Book(
-                title=title,
-                description=description
-            )
+            book = models.Book(title=title, description=description)
             book.save()
 
     def test_book_rating_range_exceeded(self):
@@ -223,10 +221,7 @@ class BookModelTestCase(TestCase):
         rating = 13.2
 
         with self.assertRaises(utils.IntegrityError):
-            book = models.Book(
-                title=title,
-                rating=rating
-            )
+            book = models.Book(title=title, rating=rating)
             book.save()
 
     def test_str_representation_is_title(self):
@@ -239,6 +234,7 @@ class BookModelTestCase(TestCase):
         book.save()
 
         self.assertEqual(str(book), title)
+
 
 class ShoppingCartModelTestCase(TestCase):
     """
@@ -303,7 +299,7 @@ class AuthorModelTestCase(TestCase):
             second_name=second_name,
             paternal_last_name=paternal_last_name,
             maternal_last_name=maternal_last_name,
-            country=country
+            country=country,
         )
         author.save()
 
@@ -343,7 +339,7 @@ class AuthorModelTestCase(TestCase):
             author = models.Author(
                 first_name=first_name,
                 paternal_last_name=paternal_last_name,
-                country=country
+                country=country,
             )
             author.save()
 
@@ -359,7 +355,7 @@ class AuthorModelTestCase(TestCase):
         author = models.Author(
             first_name=first_name,
             paternal_last_name=paternal_last_name,
-            country=country
+            country=country,
         )
         author.save()
 
@@ -379,7 +375,7 @@ class AuthorModelTestCase(TestCase):
         author = models.Author(
             first_name=first_name,
             paternal_last_name=paternal_last_name,
-            country=country
+            country=country,
         )
         author.save()
 

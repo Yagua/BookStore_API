@@ -1,15 +1,26 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import (
-    AbstractBaseUser, PermissionsMixin, BaseUserManager
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
 )
+
 
 def get_path(instance, filename):
     return "user_{0}/{1}".format(instance.username, filename)
 
+
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password,
-            first_name, paternal_last_name, **extra_fields):
+    def create_user(
+        self,
+        username,
+        email,
+        password,
+        first_name,
+        paternal_last_name,
+        **extra_fields
+    ):
 
         user = self.model(
             username=username,
@@ -51,8 +62,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         Get full user name
         """
 
-        return "{0} {1} {2} {3}".format(self.first_name, self.second_name,
-                self.paternal_last_name, self.maternal_last_name)
+        return "{0} {1} {2} {3}".format(
+            self.first_name,
+            self.second_name,
+            self.paternal_last_name,
+            self.maternal_last_name,
+        )
 
     def get_short_name(self):
         """
@@ -73,7 +88,7 @@ class Category(models.Model):
     Category model
     """
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -81,6 +96,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Book(models.Model):
     """
@@ -99,20 +115,18 @@ class Book(models.Model):
     categories = models.ManyToManyField(Category, related_name="books")
     time_stamp = models.DateTimeField(auto_now_add=True)
 
-    # def get_categories_as_str(self):
-    #     return ", ".join([category.name for category in self.categories.all()])
-
     class Meta:
         db_table = "book"
         constraints = [
             models.CheckConstraint(
                 check=Q(rating__gte=1.0) & Q(rating__lte=10.0),
-                name="rating_gte_1.0_and_lte_10.0"
+                name="rating_gte_1.0_and_lte_10.0",
             )
         ]
 
     def __str__(self):
         return self.title
+
 
 class ShoppingCart(models.Model):
     """
@@ -126,6 +140,7 @@ class ShoppingCart(models.Model):
     class Meta:
         db_table = "shopping_cart"
 
+
 class Author(models.Model):
     """
     Author model
@@ -135,7 +150,9 @@ class Author(models.Model):
     second_name = models.CharField(max_length=80)
     paternal_last_name = models.CharField(max_length=80)
     maternal_last_name = models.CharField(max_length=80)
-    picture = models.ImageField(upload_to="book_authors/", null=True, blank=True)
+    picture = models.ImageField(
+        upload_to="book_authors/", null=True, blank=True
+    )
     country = models.CharField(max_length=70)
     books = models.ManyToManyField(Book, related_name="authors")
     time_stamp = models.DateTimeField(auto_now_add=True)

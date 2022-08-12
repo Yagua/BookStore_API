@@ -6,6 +6,14 @@ GET http://localhost:8000/api/v1/books/
 
 GET http://localhost:8000/api/v1/books/1/
 
+## Get categories of a book
+
+GET http://localhost:8000/api/v1/books/3/categories/
+
+### Update a book
+
+# PUT http://localhost:8000/api/v1/books/1/
+
 ### Change partially a book
 
 PATCH http://localhost:8000/api/v1/books/1/
@@ -16,4 +24,34 @@ Content-type: application/json
   "description": "The book 'The Python The Hard Way is a book to learn python"
 }
 
-GET https://reqres.in/api/users/1
+### Create a new Book
+
+POST http://localhost:8000/api/v1/books/
+Content-type: application/json
+
+{
+  "title": "Core Java Volume I – Fundamentals",
+  "description": "Core Java Volume I – Fundamentals is a Java reference book (Best book for Java)that offers a detailed explanation of various features of Core Java.",
+  "edition": "11th Edtion",
+  "language": "English",
+  "page_number": 928,
+  "publishier": "Pearson",
+  "rating": 9.8,
+  "available": true,
+  "categories": [
+    { "name": "Education" },
+    { "name": "Programming" }
+  ],
+  "authors": [
+    {
+      "first_name": "Cay",
+      "second_name": "Stephan",
+      "paternal_last_name": "Horstmann",
+      "country": "United States"
+    }
+  ]
+}
+
+### Delete an specific book
+
+DELETE http://localhost:8000/api/v1/books/2/

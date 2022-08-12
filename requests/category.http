@@ -1,0 +1,11 @@
+### Get all categories
+
+GET http://localhost:8000/api/v1/categories/
+
+### Get an specific category
+
+GET http://localhost:8000/api/v1/categories/1/
+
+## Get all books related to an specific category
+
+GET http://localhost:8000/api/v1/categories/3/books/
