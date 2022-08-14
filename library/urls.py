@@ -1,6 +1,8 @@
 from django.urls import path, include
 from . import views
 
+app_name = "library"
+
 books_urls = [
     path("", views.BookList.as_view(), name="book_list"),
     path("<int:pk>/", views.BookDetail.as_view(), name="book_detail"),

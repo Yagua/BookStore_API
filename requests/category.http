@@ -1,11 +1,14 @@
 ### Get all categories
 
 GET http://localhost:8000/api/v1/categories/
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 ### Get an specific category
 
 GET http://localhost:8000/api/v1/categories/1/
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 ## Get all books related to an specific category
 
 GET http://localhost:8000/api/v1/categories/3/books/
+Authorization: Bearer {{ACCESS_TOKEN}}

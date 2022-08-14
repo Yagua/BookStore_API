@@ -41,8 +41,8 @@ class BookSerializer(serializers.ModelSerializer):
     BookSerializer class for Book model
     """
 
-    categories = CategorySerializer(many=True)
-    authors = AuthorSerializer(many=True)
+    categories = CategorySerializer(many=True, required=False)
+    authors = AuthorSerializer(many=True, required=False)
 
     class Meta:
         model = Book
@@ -61,10 +61,6 @@ class BookSerializer(serializers.ModelSerializer):
             "authors",
             "time_stamp",
         )
-        extra_kwargs = {
-            "authors": {"required": False},
-            "categories": {"required": False}
-        }
 
     def create(self, validated_data: dict):
         authors = validated_data.pop("authors")

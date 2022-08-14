@@ -31,12 +31,13 @@ AUTHOR_ATTRS = {
 
 
 class BookSerializerTestCase(TestCase):
+
     def test_serialize_book_successfully(self):
         """
         Serializer a book sucessfully
         """
 
-        book = Book(**BOOK_ATTRS)
+        book = Book.objects.create(**BOOK_ATTRS)
         serializer = BookSerializer(book)
 
         self.assertEqual(book.title, serializer.data["title"])
@@ -54,40 +55,42 @@ class BookSerializerTestCase(TestCase):
         Deserialize a book sucessfully
         """
 
-        author = Author.objects.create(**AUTHOR_ATTRS)
-        category = Category.objects.create(**CATEGORY_ATTRS)
-
-        data = BOOK_ATTRS.copy()
-        data["categories"] = [category.id]
-        data["authors"] = [author.id]
-        serializer = BookSerializer(data=data)
+        serializer = BookSerializer(data=BOOK_ATTRS)
 
         self.assertTrue(serializer.is_valid())
-        self.assertEqual(serializer.data["title"], data["title"])
-        self.assertEqual(serializer.data["description"], data["description"])
-        self.assertEqual(serializer.data["cover"], data["cover"])
-        self.assertEqual(serializer.data["edition"], data["edition"])
-        self.assertEqual(serializer.data["language"], data["language"])
-        self.assertEqual(serializer.data["page_number"], data["page_number"])
-        self.assertEqual(serializer.data["publishier"], data["publishier"])
-        self.assertEqual(serializer.data["rating"], data["rating"])
-        self.assertEqual(serializer.data["available"], data["available"])
-        self.assertEqual(serializer.data["categories"][0], category.id)
-        self.assertEqual(serializer.data["authors"][0], author.id)
+        self.assertEqual(
+                serializer.validated_data["title"], BOOK_ATTRS["title"])
+        self.assertEqual(
+                serializer.validated_data["description"], BOOK_ATTRS["description"])
+        self.assertEqual(
+                serializer.validated_data["cover"], BOOK_ATTRS["cover"])
+        self.assertEqual(
+                serializer.validated_data["edition"], BOOK_ATTRS["edition"])
+        self.assertEqual(
+                serializer.validated_data["language"], BOOK_ATTRS["language"])
+        self.assertEqual(
+                serializer.validated_data["page_number"], BOOK_ATTRS["page_number"])
+        self.assertEqual(
+                serializer.validated_data["publishier"], BOOK_ATTRS["publishier"])
+        self.assertEqual(
+                serializer.validated_data["rating"], BOOK_ATTRS["rating"])
+        self.assertEqual(
+                serializer.validated_data["available"], BOOK_ATTRS["available"])
         self.assertFalse(bool(serializer.errors))
 
     def test_deserialize_book_unsuccessfully(self):
         """
         Deserialize a book unsucessfully
-        (missing authors and categories values)
+        (empty payload)
         """
 
-        serializer = BookSerializer(data=BOOK_ATTRS)
+        serializer = BookSerializer(data={})
         self.assertFalse(serializer.is_valid())
         self.assertTrue(bool(serializer.errors))
 
 
 class CategorySerializerTestCase(TestCase):
+
     def test_serialize_category_sucessfully(self):
         """
         Serialize sucessfully a category
@@ -122,12 +125,14 @@ class CategorySerializerTestCase(TestCase):
 
 
 class AuthorSerializerTestCase(TestCase):
+
     def test_serialize_author_successfully(self):
         """
         Serialize an Author sucessfully
         """
 
-        author = Author.objects.create(**AUTHOR_ATTRS)
+        data = AUTHOR_ATTRS.copy()
+        author = Author.objects.create(**data)
         serializer = AuthorSerializer(author)
 
         self.assertEqual(author.first_name, serializer.data["first_name"])
@@ -145,36 +150,34 @@ class AuthorSerializerTestCase(TestCase):
         Deserialize an author sucessfully
         """
 
-        book = Book.objects.create(**BOOK_ATTRS)
         data = AUTHOR_ATTRS.copy()
-        data["books"] = [book.id]
         serializer = AuthorSerializer(data=data)
 
         self.assertTrue(serializer.is_valid())
         self.assertEqual(
-            serializer.data["first_name"], AUTHOR_ATTRS["first_name"]
+            serializer.validated_data["first_name"], AUTHOR_ATTRS["first_name"]
         )
         self.assertEqual(
-            serializer.data["second_name"], AUTHOR_ATTRS["second_name"]
+            serializer.validated_data["second_name"], AUTHOR_ATTRS["second_name"]
         )
         self.assertEqual(
-            serializer.data["paternal_last_name"],
+            serializer.validated_data["paternal_last_name"],
             AUTHOR_ATTRS["paternal_last_name"],
         )
         self.assertEqual(
-            serializer.data["maternal_last_name"],
+            serializer.validated_data["maternal_last_name"],
             AUTHOR_ATTRS["maternal_last_name"],
         )
-        self.assertEqual(serializer.data["country"], AUTHOR_ATTRS["country"])
+        self.assertEqual(serializer.validated_data["country"], AUTHOR_ATTRS["country"])
         self.assertFalse(bool(serializer.errors))
 
     def test_deserialize_author_unsucessfully(self):
         """
         Deserialize an author unsucessfully
-        (missing books value)
+        (empty payload)
         """
 
-        serializer = AuthorSerializer(data=AUTHOR_ATTRS)
+        serializer = AuthorSerializer(data={})
 
         self.assertFalse(serializer.is_valid())
         self.assertTrue(bool(serializer.errors))

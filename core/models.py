@@ -12,6 +12,10 @@ def get_path(instance, filename):
 
 
 class UserManager(BaseUserManager):
+    """
+    Custom UserManager
+    """
+
     def create_user(
         self,
         username,
@@ -21,6 +25,9 @@ class UserManager(BaseUserManager):
         paternal_last_name,
         **extra_fields
     ):
+        """
+        Create a new user
+        """
 
         user = self.model(
             username=username,

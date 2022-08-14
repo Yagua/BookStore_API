@@ -1,0 +1,24 @@
+POST http://localhost:8000/api/v1/login/
+Content-type: application/json
+
+#test user
+{
+  "username": "mrfixthis",
+  "password": "fixthis"
+}
+
+POST http://localhost:8000/api/v1/logout/
+Authorization: Bearer {{ACCESS_TOKEN}}
+Content-type: application/json
+
+{
+  "refresh": "{{REFRESH_TOKEN}}"
+}
+
+
+POST http://localhost:8000/api/v1/token/refresh/
+Content-type: application/json
+
+{
+  "refresh": "{{REFRESH_TOKEN}}"
+}
