@@ -41,6 +41,29 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def create_superuser(
+        self,
+        username,
+        email,
+        password,
+        first_name,
+        paternal_last_name,
+        **extra_fields
+    ):
+        user = self.create_user(
+            username,
+            email,
+            password,
+            first_name,
+            paternal_last_name,
+            **extra_fields
+        )
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
+
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -95,7 +118,7 @@ class Category(models.Model):
     Category model
     """
 
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

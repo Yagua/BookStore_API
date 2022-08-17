@@ -1,0 +1,20 @@
+### Get all users in the database
+
+GET http://localhost:8000/api/v1/users/
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+### Create a new user
+
+POST http://localhost:8000/api/v1/users/register/
+Content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "username": "pache",
+  "email": "pache.vega@email.com",
+  "password": "testpassword",
+  "first_name": "Jose",
+  "second_name": "Eduardo",
+  "paternal_last_name": "Vega",
+  "maternal_last_name": "Castro"
+}

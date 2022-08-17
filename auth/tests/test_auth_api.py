@@ -1,5 +1,5 @@
 from django.test import TestCase
-from core.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 
@@ -15,7 +15,7 @@ class LoginViewTestCase(TestCase):
             "is_active": True,
             "is_staff": True,
         }
-        self.user = User.objects.create_user(**self.user_attrs)
+        self.user = get_user_model().objects.create_user(**self.user_attrs)
 
     def test_login_user_successfully(self):
         """

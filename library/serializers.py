@@ -68,11 +68,11 @@ class BookSerializer(serializers.ModelSerializer):
         book = Book.objects.create(**validated_data)
 
         for author in authors:
-            new_author = Author.objects.create(**author)
+            new_author, _ = Author.objects.get_or_create(**author)
             new_author.books.add(book)
 
         for category in categories:
-            new_category = Category.objects.create(**category)
+            new_category, _ = Category.objects.get_or_create(**category)
             new_category.books.add(book)
 
         return book
