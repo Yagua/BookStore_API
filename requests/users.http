@@ -18,3 +18,34 @@ Authorization: Bearer {{ACCESS_TOKEN}}
   "paternal_last_name": "Vega",
   "maternal_last_name": "Castro"
 }
+
+## Update an existing user
+
+PUT http://localhost:8000/api/v1/users/8/
+Content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "username": "Pache",
+  "email": "pache.vega@email.com",
+  "password": "poorpass",
+  "first_name": "Jose",
+  "second_name": "Eduardo",
+  "paternal_last_name": "Vega",
+  "maternal_last_name": "Castro"
+}
+
+## Update partially an existing user
+
+PATCH http://localhost:8000/api/v1/users/8/
+Content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "is_active": false
+}
+
+## Delete an existing user
+
+DELETE http://localhost:8000/api/v1/users/8/
+Authorization: Bearer {{ACCESS_TOKEN}}

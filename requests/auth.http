@@ -3,8 +3,8 @@ Content-type: application/json
 
 #test user
 {
-  "username": "mrfixthis",
-  "password": "fixthis"
+  "username": "yagua",
+  "password": "root"
 }
 
 POST http://localhost:8000/api/v1/logout/
