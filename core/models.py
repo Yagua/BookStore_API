@@ -39,6 +39,7 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.save(using=self._db)
+        _ = ShoppingCart.objects.create(user=user)
         return user
 
     def create_superuser(
@@ -62,7 +63,6 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
-
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -162,13 +162,27 @@ class Book(models.Model):
         return self.title
 
 
+class ShoppingCartItem(models.Model):
+    """
+    ShoppingCartItem model
+    """
+
+    book = models.OneToOneField(Book, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=1)
+    date_added = models.DateTimeField(auto_now=True)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "shopping_cart_item"
+
+
 class ShoppingCart(models.Model):
     """
     ShoppingCart model
     """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    books = models.ManyToManyField(Book, "carts")
+    items = models.ManyToManyField(ShoppingCartItem, "items")
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -20,6 +20,7 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = (
+            "id",
             "first_name",
             "second_name",
             "paternal_last_name",
@@ -32,7 +33,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "maternal_last_name": {"required": False},
             "second_name": {"required": False},
-            "books": {"required": False},
+            "books": {"required": False, "allow_empty": True},
         }
 
 
@@ -41,8 +42,8 @@ class BookSerializer(serializers.ModelSerializer):
     BookSerializer class for Book model
     """
 
-    categories = CategorySerializer(many=True, required=False)
-    authors = AuthorSerializer(many=True, required=False)
+    categories = CategorySerializer(many=True, required=False, allow_empty=True)
+    authors = AuthorSerializer(many=True, required=False, allow_empty=True)
 
     class Meta:
         model = Book

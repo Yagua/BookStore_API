@@ -47,5 +47,5 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 
 ## Delete an existing user
 
-DELETE http://localhost:8000/api/v1/users/8/
+DELETE http://localhost:8000/api/v1/users/4/
 Authorization: Bearer {{ACCESS_TOKEN}}

@@ -16,22 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "is_staff",
             "picture",
+            "shoppingcart"
         )
         extra_kwargs = {
-            "password": {
-                "write_only": True,
-                "min_length": 5
-            },
-            "picture": {
-                "required": False
-            },
-            "is_active": {
-                "required": False
-            },
-            "is_staff": {
-                "required": False,
-                "read_only": True
-            },
+            "password": { "write_only": True, "min_length": 5 },
+            "picture": { "required": False },
+            "is_active": { "required": False },
+            "is_staff": { "required": False, "read_only": True },
+            "shoppingcart": { "read_only": True }
         }
 
     def create(self, validated_data):
