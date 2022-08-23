@@ -6,7 +6,8 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("library.urls")),
-    path("api/v1/", include("auth.urls")),
-    path("api/v1/users/", include("user.urls")),
+    path("api/v1/auth/", include("djoser.urls")),
+    path("api/v1/auth/", include("djoser.urls.jwt")),
     path("api/v1/carts/", include("cart.urls")),
+    path("api/v1/profile/", include("user_profile.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

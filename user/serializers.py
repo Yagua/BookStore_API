@@ -15,12 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
             "maternal_last_name",
             "is_active",
             "is_staff",
-            "picture",
-            "shoppingcart"
+            "shoppingcart",
+            "profile",
         )
         extra_kwargs = {
             "password": { "write_only": True, "min_length": 5 },
-            "picture": { "required": False },
+            "profile": { "required": False },
             "is_active": { "required": False },
             "is_staff": { "required": False, "read_only": True },
             "shoppingcart": { "read_only": True }
@@ -55,7 +55,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
         instance.is_active = validated_data.get("is_active", instance.is_active)
         instance.is_staff = validated_data.get("is_staff", instance.is_staff)
-        instance.picture = validated_data.get("picture", instance.picture)
 
         password = validated_data.get("password", None)
         if password:

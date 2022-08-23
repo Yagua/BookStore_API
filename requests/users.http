@@ -1,29 +1,36 @@
 ### Get all users in the database
 
-GET http://localhost:8000/api/v1/users/
-Authorization: Bearer {{ACCESS_TOKEN}}
+GET http://localhost:8000/api/v1/auth/users/
+Authorization: JWT {{ACCESS_TOKEN}}
 
 ### Create a new user
 
-POST http://localhost:8000/api/v1/users/register/
+POST http://localhost:8000/api/v1/auth/users/
 Content-type: application/json
-Authorization: Bearer {{ACCESS_TOKEN}}
+Authorization: JWT {{ACCESS_TOKEN}}
 
 {
   "username": "pache",
   "email": "pache.vega@email.com",
   "password": "testpassword",
+  "re_password": "testpassword",
   "first_name": "Jose",
   "second_name": "Eduardo",
   "paternal_last_name": "Vega",
   "maternal_last_name": "Castro"
 }
 
-## Update an existing user
+### GET current user
 
-PUT http://localhost:8000/api/v1/users/8/
+GET http://localhost:8000/api/v1/auth/users/me/
+Authorization: JWT {{ACCESS_TOKEN}}
+
+
+## Update cuerrent user
+
+PUT http://localhost:8000/api/v1/auth/users/me/
 Content-type: application/json
-Authorization: Bearer {{ACCESS_TOKEN}}
+Authorization: JWT {{ACCESS_TOKEN}}
 
 {
   "username": "Pache",
@@ -35,17 +42,31 @@ Authorization: Bearer {{ACCESS_TOKEN}}
   "maternal_last_name": "Castro"
 }
 
-## Update partially an existing user
+## Update partially current user
 
-PATCH http://localhost:8000/api/v1/users/8/
+PATCH http://localhost:8000/api/v1/auth/users/me/
 Content-type: application/json
-Authorization: Bearer {{ACCESS_TOKEN}}
+Authorization: JWT {{ACCESS_TOKEN}}
 
 {
-  "is_active": false
+  "is_active": true
 }
 
 ## Delete an existing user
 
-DELETE http://localhost:8000/api/v1/users/4/
-Authorization: Bearer {{ACCESS_TOKEN}}
+DELETE http://localhost:8000/api/v1/auth/users/me/
+Authorization: JWT {{ACCESS_TOKEN}}
+Content-type: application/json
+
+{
+  "current_password": "testpassword"
+}
+
+POST http://localhost:8000/api/v1/auth/users/activation/
+Content-type: application/json
+
+{
+  "uid": "1",
+  "token": "{{ACCESS_TOKEN}}"
+}
+

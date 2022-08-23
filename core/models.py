@@ -7,10 +7,6 @@ from django.contrib.auth.models import (
 )
 
 
-def get_path(instance, filename):
-    return "user_{0}/{1}".format(instance.username, filename)
-
-
 class UserManager(BaseUserManager):
     """
     Custom UserManager
@@ -40,6 +36,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         _ = ShoppingCart.objects.create(user=user)
+        _ = UserProfile.objects.create(user=user)
         return user
 
     def create_superuser(
@@ -79,7 +76,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     maternal_last_name = models.CharField(max_length=150, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    picture = models.ImageField(upload_to=get_path, blank=True, null=True)
 
     objects = UserManager()
 
@@ -116,6 +112,32 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+
+def get_path(instance, filename):
+    return "user_{0}/{1}".format(instance.user.username, filename)
+
+class UserProfile(models.Model):
+    """
+    User Profile Model
+    """
+
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile"
+    )
+    picture = models.ImageField(upload_to=get_path, blank=True, null=True)
+    adress_line_1 = models.CharField(max_length=255, default="")
+    adress_line_2 = models.CharField(max_length=255, default="")
+    city = models.CharField(max_length=255, default="")
+    state_provice_region = models.CharField(max_length=255, default="")
+    zip_code = models.CharField(max_length=20, default="")
+    phone = models.CharField(max_length=50, default="")
+    country = models.CharField(max_length=255, default="United States")
+
+    def __str__(self):
+        return self.user.get_short_name()
+
+    class Meta:
+        db_table = "user_profile"
 
 class Category(models.Model):
     """

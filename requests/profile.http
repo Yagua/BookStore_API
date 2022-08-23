@@ -1,0 +1,13 @@
+GET http://localhost:8000/api/v1/profile/user/
+Authorization: JWT {{ACCESS_TOKEN}}
+
+PUT http://localhost:8000/api/v1/profile/update/
+Authorization: JWT {{ACCESS_TOKEN}}
+
+{
+  "city": "Bogota",
+  "state_provice_region": "Bogota D.C",
+  "zip_code": "11898",
+  "phone": "3007028541",
+  "country": "United States"
+}

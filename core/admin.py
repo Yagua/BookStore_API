@@ -1,5 +1,12 @@
 from django.contrib import admin
 from . import models
 
-# Register your models here.
-admin.site.register(models.User)
+admin.site.register([
+    models.User,
+    models.UserProfile,
+    models.Book,
+    models.Category,
+    models.ShoppingCart,
+    models.ShoppingCartItem,
+    models.Author,
+])
