@@ -2,19 +2,36 @@
 
 GET http://localhost:8000/api/v1/carts/
 Authorization: Bearer {{ACCESS_TOKEN}}
-#Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxMTk3ODU4LCJpYXQiOjE2NjExMTE0NTgsImp0aSI6Ijg4MjkxMDViOWNkZDQ3ZmJiZDMyMjdmZTU0MmFkZGNmIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJtcmZpeHRoaXMifQ.VagrDemCczqEzLsoASymKG11P_N92WHZoqe6TkZfMPk
 
 ### Get an specific cart
 
-GET http://localhost:8000/api/v1/carts/4/
+GET http://localhost:8000/api/v1/carts/1/
 Authorization: Bearer {{ACCESS_TOKEN}}
 
 ### Add book to cart
 
-POST http://localhost:8000/api/v1/carts/add-item/1/
+POST http://localhost:8000/api/v1/carts/add-item/
 Authorization: Bearer {{ACCESS_TOKEN}}
+Content-type: application/json
+
+{
+  "book_id": 1,
+  "quantity": 9
+}
 
 ## delete an item from user cart
 
-DELETE http://localhost:8000/api/v1/carts/remove-item/6/
+DELETE http://localhost:8000/api/v1/carts/remove-item/3/
 Authorization: Bearer {{ACCESS_TOKEN}}
+
+
+GET http://localhost:8000/api/v1/carts/items/
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+PUT http://localhost:8000/api/v1/carts/update-item/
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "book_id": 1,
+  "quantity": 33
+}

@@ -145,6 +145,7 @@ class Book(models.Model):
     page_number = models.IntegerField(default=0)
     publishier = models.CharField(max_length=100)
     rating = models.FloatField(default=8.0)
+    price = models.FloatField(default=0.0)
     available = models.BooleanField(default=True)
     categories = models.ManyToManyField(Category, related_name="books")
     time_stamp = models.DateTimeField(auto_now_add=True)
@@ -155,6 +156,10 @@ class Book(models.Model):
             models.CheckConstraint(
                 check=Q(rating__gte=1.0) & Q(rating__lte=10.0),
                 name="rating_gte_1.0_and_lte_10.0",
+            ),
+            models.CheckConstraint(
+                check=Q(price__gte=0.0),
+                name="price_must_be_gte_0.0"
             )
         ]
 
