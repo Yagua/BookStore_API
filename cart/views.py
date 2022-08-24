@@ -2,10 +2,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from django.shortcuts import get_object_or_404
 
 from core.models import ShoppingCart, ShoppingCartItem, Book
 from .serializers import ShoppingCartSerializer, ShoppingCartItemSerializer
+from utils.model_tools import get_instance
 
 @api_view(["GET"])
 @permission_classes([IsAdminUser, IsAuthenticated])
@@ -17,17 +17,6 @@ def list_shopping_carts(request):
     queryset = ShoppingCart.objects.all()
     serializer = ShoppingCartSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(["GET"])
-def get_shopping_cart(request, pk):
-    """
-    Get an specific shoppingcart
-    """
-
-    cart = get_object_or_404(ShoppingCart, pk=pk)
-    serializer = ShoppingCartSerializer(cart)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 @api_view(["POST"])
 def add_item_to_cart(request):
@@ -43,21 +32,18 @@ def add_item_to_cart(request):
             "error": "The 'book_id' and 'quantity' must be intengers values."
         }, status=status.HTTP_400_BAD_REQUEST)
 
-    books = Book.objects.all()
-    if not books.filter(pk=book_id).exists():
-        return Response({
-            "error": "The book '{0}' does not exists".format(book_id)
-        }, status=status.HTTP_404_NOT_FOUND)
-    book = books.get(pk=book_id)
+    exist, result = get_instance(Book, pk=book_id)
+    if not exist:
+        return result
 
     cart = ShoppingCart.objects.get(user=request.user)
 
-    if cart.items.filter(book=book).exists():
-        existent_item = cart.items.get(book=book)
+    if cart.items.filter(book=result).exists():
+        existent_item = cart.items.get(book=result)
         existent_item.quantity = quantity
         existent_item.save()
     else:
-        item = ShoppingCartItem.objects.create(book=book, quantity=quantity)
+        item = ShoppingCartItem.objects.create(book=result, quantity=quantity)
         cart.items.add(item)
 
     serializer = ShoppingCartSerializer(cart)
@@ -79,6 +65,18 @@ def remove_item_from_cart(request, item_id):
     item.delete()
     serializer = ShoppingCartSerializer(cart)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_shopping_cart(request):
+    """
+    Get an specific shoppingcart
+    """
+
+    cart = ShoppingCart.objects.get(user=request.user)
+    serializer = ShoppingCartSerializer(cart)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 def get_user_cart_items(request):
@@ -104,15 +102,13 @@ def update_cart_item(request):
             "error": "The 'book_id' and 'quantity' must be intengers values."
         }, status=status.HTTP_400_BAD_REQUEST)
 
-    books = Book.objects.all()
-    if not books.filter(pk=book_id).exists():
-        return Response({
-            "error": "The book '{0}' does not exists".format(book_id)
-        }, status=status.HTTP_404_NOT_FOUND)
-    book = books.get(pk=book_id)
+    exists, result = get_instance(Book, pk=book_id)
+    if not exists:
+        return result
+
     cart = ShoppingCart.objects.get(user=request.user)
 
-    item = cart.items.filter(book=book)
+    item = cart.items.filter(book=result)
     if not item.exists():
         return Response({
             "error": "This book is not in the cart."

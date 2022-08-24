@@ -5,8 +5,8 @@ Content-type: application/json
 
 #test user
 {
-  "username": "pache",
-  "password": "testpassword"
+  "username": "yagua",
+  "password": "root"
 }
 
 # generate a new pair access-fresh tokens

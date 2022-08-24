@@ -2,10 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from django.shortcuts import get_object_or_404
 
 from .serializers import BookSerializer, CategorySerializer, AuthorSerializer
 from core.models import Book, Category, Author
+from utils.model_tools import get_instance
 
 
 class BookList(APIView):
@@ -18,8 +18,8 @@ class BookList(APIView):
         Get all books in database
         """
 
-        books = Book.objects.all()
-        serializer = BookSerializer(books, many=True)
+        queryset = Book.objects.all()
+        serializer = BookSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -44,8 +44,11 @@ class BookDetail(APIView):
         Get a book by id (primary key)
         """
 
-        book = get_object_or_404(Book, pk=pk)
-        serializer = BookSerializer(book)
+        exists, result = get_instance(Book, pk=pk)
+        if not exists:
+            return result
+
+        serializer = BookSerializer(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -53,8 +56,11 @@ class BookDetail(APIView):
         Update an specific book
         """
 
-        book = get_object_or_404(Book, pk=pk)
-        serializer = BookSerializer(book, data=request.data)
+        exists, result = get_instance(Book, pk=pk)
+        if not exists:
+            return result
+
+        serializer = BookSerializer(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -65,8 +71,11 @@ class BookDetail(APIView):
         Update partially an specific book
         """
 
-        book = get_object_or_404(Book, pk=pk)
-        serializer = BookSerializer(book, data=request.data, partial=True)
+        exists, result = get_instance(Book, pk=pk)
+        if not exists:
+            return result
+
+        serializer = BookSerializer(result, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -77,8 +86,11 @@ class BookDetail(APIView):
         Delete a book
         """
 
-        book = get_object_or_404(Book, pk=pk)
-        book.delete()
+        exists, result = get_instance(Book, pk=pk)
+        if not exists:
+            return result
+
+        result.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -88,8 +100,11 @@ def book_categories(request, pk):
     Get all categories of the book specified by the given pk
     """
 
-    book = get_object_or_404(Book, pk=pk)
-    categories = book.categories
+    exists, result = get_instance(Book, pk=pk)
+    if not exists:
+        return result
+
+    categories = Category.objects.filter(books=result)
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -104,8 +119,8 @@ class CategoryList(APIView):
         Get all categories in database
         """
 
-        category = Category.objects.all()
-        serializer = CategorySerializer(category, many=True)
+        queryset = Category.objects.all()
+        serializer = CategorySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -130,8 +145,11 @@ class CategoryDetail(APIView):
         Get a category by id (primary key)
         """
 
-        category = get_object_or_404(Category, pk=pk)
-        serializer = CategorySerializer(category)
+        exists, result = get_instance(Category, pk=pk)
+        if not exists:
+            return result
+
+        serializer = CategorySerializer(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -139,8 +157,11 @@ class CategoryDetail(APIView):
         Update an specific category
         """
 
-        category = get_object_or_404(Category, pk=pk)
-        serializer = CategorySerializer(category, data=request.data)
+        exists, result = get_instance(Category, pk=pk)
+        if not exists:
+            return result
+
+        serializer = CategorySerializer(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -151,9 +172,12 @@ class CategoryDetail(APIView):
         Update partially an specific category
         """
 
-        category = get_object_or_404(Category, pk=pk)
+        exists, result = get_instance(Category, pk=pk)
+        if not exists:
+            return result
+
         serializer = CategorySerializer(
-            category, data=request.data, partial=True
+            result, data=request.data, partial=True
         )
         if serializer.is_valid():
             serializer.save()
@@ -165,8 +189,10 @@ class CategoryDetail(APIView):
         Delete a category
         """
 
-        category = get_object_or_404(Category, pk=pk)
-        category.delete()
+        exists, result = get_instance(Category, pk=pk)
+        if not exists:
+            return result
+        result.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -176,8 +202,10 @@ def category_books(request, pk):
     Get all books with the category specified by the given pk
     """
 
-    category = get_object_or_404(Category, pk=pk)
-    books = category.books
+    exists, result = get_instance(Category, pk=pk)
+    if not exists:
+        return result
+    books = Book.objects.filter(categories=result)
     serializer = BookSerializer(books, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -192,8 +220,8 @@ class AuthorList(APIView):
         Get all authors in database
         """
 
-        authors = Author.objects.all()
-        serializer = AuthorSerializer(authors, many=True)
+        queryset = Author.objects.all()
+        serializer = AuthorSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -218,8 +246,11 @@ class AuthorDetail(APIView):
         Get an author by id (primary key)
         """
 
-        author = get_object_or_404(Author, pk=pk)
-        serializer = AuthorSerializer(author)
+        exists, result = get_instance(Author, pk=pk)
+        if not exists:
+            return result
+
+        serializer = AuthorSerializer(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -227,8 +258,11 @@ class AuthorDetail(APIView):
         Update an specific author
         """
 
-        author = get_object_or_404(Author, pk=pk)
-        serializer = AuthorSerializer(author, data=request.data)
+        exists, result = get_instance(Author, pk=pk)
+        if not exists:
+            return result
+
+        serializer = AuthorSerializer(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -239,8 +273,11 @@ class AuthorDetail(APIView):
         Update partially an specific author
         """
 
-        author = get_object_or_404(Author, pk=pk)
-        serializer = AuthorSerializer(author, data=request.data, partial=True)
+        exists, result = get_instance(Author, pk=pk)
+        if not exists:
+            return result
+
+        serializer = AuthorSerializer(result, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -251,8 +288,10 @@ class AuthorDetail(APIView):
         Delete an author
         """
 
-        author = get_object_or_404(Author, pk=pk)
-        author.delete()
+        exists, result = get_instance(Author, pk=pk)
+        if not exists:
+            return result
+        result.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -262,7 +301,10 @@ def author_books(request, pk):
     Get all books of the author specified by the given pk
     """
 
-    author = get_object_or_404(Author, pk=pk)
-    books = author.books
+    exists, result = get_instance(Author, pk=pk)
+    if not exists:
+        return result
+
+    books = Book.objects.filter(author=result)
     serializer = BookSerializer(books, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

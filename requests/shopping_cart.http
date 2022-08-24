@@ -3,9 +3,9 @@
 GET http://localhost:8000/api/v1/carts/
 Authorization: JWT {{ACCESS_TOKEN}}
 
-### Get an specific cart
+### Get current user cart
 
-GET http://localhost:8000/api/v1/carts/1/
+GET http://localhost:8000/api/v1/carts/user-cart/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 ### Add book to cart
@@ -16,12 +16,12 @@ Content-type: application/json
 
 {
   "book_id": 1,
-  "quantity": 9
+  "quantity": 18
 }
 
 ## delete an item from user cart
 
-DELETE http://localhost:8000/api/v1/carts/remove-item/3/
+DELETE http://localhost:8000/api/v1/carts/remove-item/1/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 
