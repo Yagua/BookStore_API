@@ -3,4 +3,4 @@
 ### TODOS
 
 - Write test for all components in the apps
-- Implement pagination and filtering mechanisms in all views
+- Implement filtering mechanism in all views (try to add elastic search)

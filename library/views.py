@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -7,8 +8,7 @@ from .serializers import BookSerializer, CategorySerializer, AuthorSerializer
 from core.models import Book, Category, Author
 from utils.model_tools import get_instance
 
-
-class BookList(APIView):
+class BookList(GenericAPIView):
     """
     List all books in database or create new one
     """
@@ -19,8 +19,9 @@ class BookList(APIView):
         """
 
         queryset = Book.objects.all()
-        serializer = BookSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        page = self.paginate_queryset(queryset)
+        serializer = BookSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         """
@@ -109,7 +110,7 @@ def book_categories(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CategoryList(APIView):
+class CategoryList(GenericAPIView):
     """
     List all categories in database or create new one
     """
@@ -120,8 +121,9 @@ class CategoryList(APIView):
         """
 
         queryset = Category.objects.all()
-        serializer = CategorySerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        page = self.paginate_queryset(queryset)
+        serializer = CategorySerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         """
@@ -210,7 +212,7 @@ def category_books(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AuthorList(APIView):
+class AuthorList(GenericAPIView):
     """
     List all authors in database or create new one
     """
@@ -221,8 +223,9 @@ class AuthorList(APIView):
         """
 
         queryset = Author.objects.all()
-        serializer = AuthorSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        page = self.paginate_queryset(queryset)
+        serializer = AuthorSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         """

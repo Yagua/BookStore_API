@@ -19,9 +19,10 @@ def get_instance(model, *args, **kwargs):
         model_name = model.__name__.lower()
         return (
             False,
-            Response({
-                "error": f"The specified {model_name} does not exists." },
+            Response(
+                { "error": f"The specified {model_name} does not exists." },
                 status=status.HTTP_404_NOT_FOUND
-        ))
+            )
+        )
     return (True, instance.first())
 
