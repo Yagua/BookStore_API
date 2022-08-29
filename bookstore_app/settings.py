@@ -87,6 +87,8 @@ DATABASES = {
         "NAME": "bookstore",
         "USER": "dilanbaron",
         "PASSWORD": "root",
+        "HOST": "mdb",
+        "PORT": "3306",
     }
 }
 

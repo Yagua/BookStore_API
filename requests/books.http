@@ -1,11 +1,11 @@
 ### Get all Books
 
-GET http://localhost:8000/api/v1/books/?page=1
+GET http://localhost:8000/api/v1/books/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 ### Get an specific book
 
-GET http://localhost:8000/api/v1/books/1/
+GET http://localhost:8000/api/v1/books/6/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 ## Get categories of a book
@@ -23,7 +23,7 @@ Content-type: application/json
 
 ### Change partially a book
 
-PATCH http://localhost:8000/api/v1/books/1/
+PATCH http://localhost:8000/api/v1/books/7/
 Content-type: application/json
 Authorization: JWT {{ACCESS_TOKEN}}
 
@@ -63,5 +63,5 @@ Authorization: JWT {{ACCESS_TOKEN}}
 
 ### Delete an specific book
 
-DELETE http://localhost:8000/api/v1/books/2/
+DELETE http://localhost:8000/api/v1/books/6/
 Authorization: JWT {{ACCESS_TOKEN}}

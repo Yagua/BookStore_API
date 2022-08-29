@@ -1,0 +1,42 @@
+version: "3.4"
+
+services:
+  web:
+    restart: always
+    container_name: bookstore_app
+    build:
+      context: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/bookstore_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mdb
+
+  mdb:
+    restart: always
+    container_name: mariadb
+    image: mariadb:10.10.1-rc-jammy
+    environment:
+      - MARIADB_USER=dilanbaron
+      - MARIADB_PASSWORD=root
+      - MARIADB_DATABASE=bookstore
+      - MARIADB_ROOT_PASSWORD=root
+    ports:
+      - "5200:3306"
+
+  elasticsearch:
+    container_name: elasticsearch_bookstore
+    image: elasticsearch:8.4.0
+    environment:
+      - cluster.name=bookstore_app-elasticsearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m
+    volumes:
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+    depends_on:
+      - mdb
