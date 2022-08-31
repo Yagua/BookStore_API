@@ -23,13 +23,13 @@ Content-type: application/json
 
 ### Change partially a book
 
-PATCH http://localhost:8000/api/v1/books/7/
+PATCH http://localhost:8000/api/v1/books/3/
 Content-type: application/json
 Authorization: JWT {{ACCESS_TOKEN}}
 
 {
-  "title": "Python The Hard Way",
-  "description": "The book 'The Python The Hard Way is a book to learn python"
+  "title": "Go lang The Hard Way",
+  "description": "Go lang the hard way ..."
 }
 
 ### Create a new Book

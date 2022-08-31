@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "django_elasticsearch_dsl",
     "djoser",
     "corsheaders",
     # local apps
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "user_profile",
     "cart",
     "library",
+    "search",
 ]
 
 MIDDLEWARE = [
@@ -186,3 +188,9 @@ DJOSER = {
 }
 
 CORS_ALLOWED_ORIGINS = []
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}

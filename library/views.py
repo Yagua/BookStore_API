@@ -8,10 +8,13 @@ from .serializers import BookSerializer, CategorySerializer, AuthorSerializer
 from core.models import Book, Category, Author
 from utils.model_tools import get_instance
 
+
 class BookList(GenericAPIView):
     """
     List all books in database or create new one
     """
+
+    serializer_class = BookSerializer
 
     def get(self, request):
         """
@@ -20,7 +23,7 @@ class BookList(GenericAPIView):
 
         queryset = Book.objects.all()
         page = self.paginate_queryset(queryset)
-        serializer = BookSerializer(page, many=True)
+        serializer = self.serializer_class(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
@@ -28,7 +31,7 @@ class BookList(GenericAPIView):
         Create a new book
         """
 
-        serializer = BookSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -40,6 +43,8 @@ class BookDetail(APIView):
     Get an specific book, update, or delete it
     """
 
+    serializer_class = BookSerializer
+
     def get(self, request, pk):
         """
         Get a book by id (primary key)
@@ -49,7 +54,7 @@ class BookDetail(APIView):
         if not exists:
             return result
 
-        serializer = BookSerializer(result)
+        serializer = self.serializer_class(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -61,7 +66,7 @@ class BookDetail(APIView):
         if not exists:
             return result
 
-        serializer = BookSerializer(result, data=request.data)
+        serializer = self.serializer_class(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -76,7 +81,9 @@ class BookDetail(APIView):
         if not exists:
             return result
 
-        serializer = BookSerializer(result, data=request.data, partial=True)
+        serializer = self.serializer_class(
+            result, data=request.data, partial=True
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -115,6 +122,8 @@ class CategoryList(GenericAPIView):
     List all categories in database or create new one
     """
 
+    serializer_class = CategorySerializer
+
     def get(self, request):
         """
         Get all categories in database
@@ -122,7 +131,7 @@ class CategoryList(GenericAPIView):
 
         queryset = Category.objects.all()
         page = self.paginate_queryset(queryset)
-        serializer = CategorySerializer(page, many=True)
+        serializer = self.serializer_class(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
@@ -130,7 +139,7 @@ class CategoryList(GenericAPIView):
         Create a new category
         """
 
-        serializer = CategorySerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -142,6 +151,8 @@ class CategoryDetail(APIView):
     Get an specific category, update, or delete it
     """
 
+    serializer_class = CategorySerializer
+
     def get(self, request, pk):
         """
         Get a category by id (primary key)
@@ -151,7 +162,7 @@ class CategoryDetail(APIView):
         if not exists:
             return result
 
-        serializer = CategorySerializer(result)
+        serializer = self.serializer_class(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -163,7 +174,7 @@ class CategoryDetail(APIView):
         if not exists:
             return result
 
-        serializer = CategorySerializer(result, data=request.data)
+        serializer = self.serializer_class(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -178,7 +189,7 @@ class CategoryDetail(APIView):
         if not exists:
             return result
 
-        serializer = CategorySerializer(
+        serializer = self.serializer_class(
             result, data=request.data, partial=True
         )
         if serializer.is_valid():
@@ -217,6 +228,8 @@ class AuthorList(GenericAPIView):
     List all authors in database or create new one
     """
 
+    serializer_class = AuthorSerializer
+
     def get(self, request):
         """
         Get all authors in database
@@ -224,7 +237,7 @@ class AuthorList(GenericAPIView):
 
         queryset = Author.objects.all()
         page = self.paginate_queryset(queryset)
-        serializer = AuthorSerializer(page, many=True)
+        serializer = self.serializer_class(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
@@ -232,7 +245,7 @@ class AuthorList(GenericAPIView):
         Create a new author
         """
 
-        serializer = AuthorSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -244,6 +257,8 @@ class AuthorDetail(APIView):
     Get an specific author, update, or delete it
     """
 
+    serializer_class = AuthorSerializer
+
     def get(self, request, pk):
         """
         Get an author by id (primary key)
@@ -253,7 +268,7 @@ class AuthorDetail(APIView):
         if not exists:
             return result
 
-        serializer = AuthorSerializer(result)
+        serializer = self.serializer_class(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -265,7 +280,7 @@ class AuthorDetail(APIView):
         if not exists:
             return result
 
-        serializer = AuthorSerializer(result, data=request.data)
+        serializer = self.serializer_class(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -280,7 +295,9 @@ class AuthorDetail(APIView):
         if not exists:
             return result
 
-        serializer = AuthorSerializer(result, data=request.data, partial=True)
+        serializer = self.serializer_class(
+            result, data=request.data, partial=True
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
