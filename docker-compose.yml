@@ -1,21 +1,16 @@
 version: "3.4"
 
 services:
-  web:
-    restart: always
+  app:
+    restart: on-failure
     container_name: bookstore_app
     build:
       context: .
-    command: sh -c "
-      sleep 10 &&
-      python manage.py makemigrations &&
-      python manage.py migrate &&
-      python manage.py runserver 0.0.0.0:8000
-      "
+    command: sh /usr/src/bookstore_app/extras/start_app
     volumes:
       - .:/usr/src/bookstore_app
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     depends_on:
       - mdb
 
@@ -40,8 +35,19 @@ services:
       - bootstrap.memory_lock=true
       - ES_JAVA_OPTS=-Xms128m -Xmx128m
     volumes:
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./extras/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200:9200"
     depends_on:
       - mdb
+
+  nginx:
+    restart: always
+    container_name: nginx_container
+    image: nginx:1.23.1
+    volumes:
+      - ./extras/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - app

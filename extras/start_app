@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+APP_NAME="bookstore_app"
+DJANGO_DIR="/usr/src/bookstore_app"
+WORKERS_NUM=3
+DJANGO_SETTINGS_MODULE="$APP_NAME.settings"
+DJANGO_WSGI_MODULE="$APP_NAME.wsgi"
+TIMEOUT=120
+
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+python manage.py makemigrations --noinput && \
+python manage.py migrate --noinput && \
+python -m gunicorn ${DJANGO_WSGI_MODULE}:application \
+    --name $APP_NAME \
+    --workers $WORKERS_NUM \
+    --timeout $TIMEOUT \
+    --bind 0.0.0.0:8000 \
+    --log-level debug \
+    --log-file -
