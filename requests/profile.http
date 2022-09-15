@@ -1,7 +1,7 @@
-GET http://localhost:8000/api/v1/profile/user/
+GET http://localhost:80/api/v1/profile/user/
 Authorization: JWT {{ACCESS_TOKEN}}
 
-PUT http://localhost:8000/api/v1/profile/update/
+PUT http://localhost:80/api/v1/profile/update/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 {

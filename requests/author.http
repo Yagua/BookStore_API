@@ -1,4 +1,4 @@
 ### Get all authors
 
-GET http://localhost:8000/api/v1/authors/
+GET http://localhost:80/api/v1/authors/
 Authorization: JWT {{ACCESS_TOKEN}}

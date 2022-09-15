@@ -21,7 +21,7 @@ SECRET_KEY = (
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+CORS_ALLOWED_ORIGINS = []
 
 # Application definition
 
@@ -180,14 +180,13 @@ DJOSER = {
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "TOKEN_MODEL": None, # None is use for stateless Tokens like JWT
     "SERIALIZERS": {
-        "user_create": "user.serializers.UserSerializer",
         "user": "user.serializers.UserSerializer",
         "current_user": "user.serializers.UserSerializer",
+        "user_create": "user.serializers.UserSerialize",
         "user_delete": "djoser.serializers.UserDeleteSerializer",
+        'user_create_password_retype': "user.serializers.UserPasswordRetypeSerializer"
     },
 }
-
-CORS_ALLOWED_ORIGINS = []
 
 ELASTICSEARCH_DSL = {
     'default': {

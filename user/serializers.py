@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from core.models import User
+from djoser.serializers import UserCreatePasswordRetypeSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,3 +63,12 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class UserPasswordRetypeSerializer(UserCreatePasswordRetypeSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = UserSerializer.Meta.fields
+        extra_kwargs = UserSerializer.Meta.extra_kwargs

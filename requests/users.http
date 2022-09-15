@@ -1,17 +1,16 @@
 ### Get all users in the database
 
-GET http://localhost:8000/api/v1/auth/users/
+GET http://localhost:80/api/v1/auth/users/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 ### Create a new user
 
-POST http://localhost:8000/api/v1/auth/users/
+POST http://localhost:80/api/v1/auth/users/
 Content-type: application/json
-Authorization: JWT {{ACCESS_TOKEN}}
 
 {
-  "username": "pache",
-  "email": "pache.vega@email.com",
+  "username": "test5",
+  "email": "test5@gamil.com",
   "password": "testpassword",
   "re_password": "testpassword",
   "first_name": "Jose",
@@ -22,7 +21,7 @@ Authorization: JWT {{ACCESS_TOKEN}}
 
 ### GET current user
 
-GET http://localhost:8000/api/v1/auth/users/me/
+GET http://localhost:80/api/v1/auth/users/me/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 
