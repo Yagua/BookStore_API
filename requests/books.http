@@ -56,7 +56,6 @@ Authorization: JWT {{ACCESS_TOKEN}}
       "first_name": "Cay",
       "second_name": "Stephan",
       "paternal_last_name": "Horstmann",
-      "country": "United States"
     }
   ]
 }

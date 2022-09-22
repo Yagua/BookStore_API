@@ -159,8 +159,8 @@ class Book(models.Model):
     Book model
     """
 
-    title = models.CharField(max_length=80)
-    description = models.TextField(max_length=200)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
     cover = models.ImageField(upload_to="books/", blank=True, null=True)
     edition = models.CharField(max_length=50)
     language = models.CharField(max_length=80)
@@ -228,7 +228,6 @@ class Author(models.Model):
     picture = models.ImageField(
         upload_to="book_authors/", null=True, blank=True
     )
-    country = models.CharField(max_length=70)
     books = models.ManyToManyField(Book, related_name="authors")
     time_stamp = models.DateTimeField(auto_now_add=True)
 

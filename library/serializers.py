@@ -26,7 +26,6 @@ class AuthorSerializer(serializers.ModelSerializer):
             "paternal_last_name",
             "maternal_last_name",
             "picture",
-            "country",
             "books",
             "time_stamp",
         )
@@ -57,19 +56,25 @@ class BookSerializer(serializers.ModelSerializer):
             "page_number",
             "publishier",
             "rating",
+            "price",
             "available",
             "categories",
             "authors",
             "time_stamp",
         )
 
-    def create(self, validated_data: dict):
+    def create(self, validated_data):
         authors = validated_data.pop("authors")
         categories = validated_data.pop("categories")
         book = Book.objects.create(**validated_data)
 
         for author in authors:
-            new_author, _ = Author.objects.get_or_create(**author)
+            new_author, _ = Author.objects.get_or_create(
+                first_name=author.get("first_name", ""),
+                second_name=author.get("second_name", ""),
+                paternal_last_name=author.get("paternal_last_name", ""),
+                maternal_last_name=author.get("maternal_last_name", ""),
+            )
             new_author.books.add(book)
 
         for category in categories:

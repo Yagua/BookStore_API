@@ -1,4 +1,4 @@
 # seach books
 
-GET http://localhost:80/api/v1/search/books/?query=hard
+GET http://localhost:80/api/v1/search/books/?query=java%20core
 Authorization: JWT {{ACCESS_TOKEN}}
