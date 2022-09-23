@@ -70,7 +70,7 @@ def remove_item_from_cart(request, item_id):
 @api_view(["GET"])
 def get_shopping_cart(request):
     """
-    Get an specific shoppingcart
+    Get shopping cart of the current user
     """
 
     cart = ShoppingCart.objects.get(user=request.user)
@@ -95,25 +95,21 @@ def update_cart_item(request):
     """
 
     try:
-        book_id = int(request.data.get("book_id", ''))
+        item_id = int(request.data.get("item_id", ''))
         quantity = int(request.data.get("quantity", ''))
     except ValueError:
         return Response({
-            "error": "The 'book_id' and 'quantity' must be intengers values."
+            "error": "The 'item_id' and 'quantity' must be intengers values."
         }, status=status.HTTP_400_BAD_REQUEST)
 
-    exists, result = get_instance(Book, pk=book_id)
-    if not exists:
-        return result
-
     cart = ShoppingCart.objects.get(user=request.user)
-
-    item = cart.items.filter(book=result)
+    item = cart.items.filter(id=item_id)
     if not item.exists():
         return Response({
-            "error": "This book is not in the cart."
+            "error": "This item does not exists in the cart."
         }, status=status.HTTP_400_BAD_REQUEST)
 
     item.update(quantity=quantity)
     serializer = ShoppingCartSerializer(cart)
+
     return Response(serializer.data, status=status.HTTP_200_OK)

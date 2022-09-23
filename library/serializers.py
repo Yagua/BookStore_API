@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ("id", "name", "time_stamp")
+        fields = ("id", "name")
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -27,7 +27,6 @@ class AuthorSerializer(serializers.ModelSerializer):
             "maternal_last_name",
             "picture",
             "books",
-            "time_stamp",
         )
         extra_kwargs = {
             "maternal_last_name": {"required": False},
@@ -60,7 +59,6 @@ class BookSerializer(serializers.ModelSerializer):
             "available",
             "categories",
             "authors",
-            "time_stamp",
         )
 
     def create(self, validated_data):

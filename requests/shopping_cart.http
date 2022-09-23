@@ -15,8 +15,8 @@ Authorization: JWT {{ACCESS_TOKEN}}
 Content-type: application/json
 
 {
-  "book_id": 1,
-  "quantity": 18
+  "book_id": 4,
+  "quantity": 3
 }
 
 ## delete an item from user cart
@@ -32,6 +32,6 @@ PUT http://localhost:80/api/v1/carts/update-item/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 {
-  "book_id": 1,
-  "quantity": 33
+  "item_id": 1,
+  "quantity": 44
 }
