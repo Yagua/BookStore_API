@@ -114,7 +114,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 def get_path(instance, filename):
-    return "user_{0}/{1}".format(instance.user.username, filename)
+    return "user_pictures/user_{0}/{1}".format(instance.user.username, filename)
 
 class UserProfile(models.Model):
     """

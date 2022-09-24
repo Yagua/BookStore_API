@@ -1,9 +1,12 @@
 import requests
-from json import dumps
 from random import uniform, randint
+import tempfile
+from urllib.request import urlretrieve
+import re
+from json import dumps
+
 
 GB_BASE_API_URL = " https://www.googleapis.com/books/v1/volumes?maxResults=40&q=subject:"
-OPTIONAL_SECTION = "&startIndex=%d"
 BASE_BOOKSTORE_API_URL = "http://localhost:80/api/v1"
 CATEGORIES = [
     "fiction",
@@ -18,34 +21,26 @@ CATEGORIES = [
     "music",
 ]
 
-# relevant information
-# {
-#   "items": [
-#     {
-#       "volumeInfo": {
-#         "title": "",
-#         "authors": [],
-#         "description": "",
-#         "publisher": "",
-#         "categories": [],
-#         "pageCount": 0,
-#         "averageRating": 2,
-#         "imageLinks": {
-#           "thumbnail": ""
-#         },
-#         "language": "en"
-#       },
-#       "saleInfo": {
-#         "listPrice": {
-#           "amount": 34916,
-#           "currencyCode": "COP"
-#         }
-#       }
-#     }
-#   ]
-# }
+def resolve_img(image_url, file_name, file_extension, tmp_dir):
+    image_name = re.sub(
+        r"[^\w|\d]", "",
+        file_name[:20] if len(file_name) > 20 else file_name
+    ).strip()
+    temp_img, _ = urlretrieve(
+        url=image_url,
+        filename=f"{tmp_dir.name}/{image_name}.{file_extension}"
+    )
+    data = None
+    with open(temp_img, "rb") as content:
+        data = content.read()
 
-# cut the url of cover thumbnail until '&img=x' to get full size image
+    result = {
+        "img-name": f"{image_name}.{file_extension}",
+        "content": data,
+        "file-extension": file_extension
+    }
+    return result
+
 
 def random_float(min, max):
     result = uniform(min, max)
@@ -64,7 +59,7 @@ def author_resolver(authors=None):
             "first_name": author_info[0],
             "paternal_last_name": author_info[1],
             "picture": None
-            })
+        })
     return result
 
 
@@ -90,7 +85,6 @@ def create_payload(json, dup):
       "available": True,
       "categories": [dup["category"]],
       "authors": ["Petter Galahat"],
-      "cover": None
     }
 
     template = {
@@ -105,10 +99,8 @@ def create_payload(json, dup):
       "categories": category_resolver(json.get("categories", fallback["categories"])),
       "authors": author_resolver(json.get("authors", fallback["authors"])),
       "price": random_float(3.5, 20.4),
-      "cover": None,
     }
-    result = dumps(template)
-    return result
+    return template
 
 
 def generate_jwt_tokens(username, password):
@@ -128,6 +120,7 @@ def generate_jwt_tokens(username, password):
 
 if __name__ == "__main__":
     tokens = generate_jwt_tokens(username="yagua", password="root")
+    book_img_temp_dir = tempfile.TemporaryDirectory()
 
     for category in CATEGORIES:
         print(category.upper())
@@ -137,18 +130,51 @@ if __name__ == "__main__":
 
             book_info = item.get("volumeInfo")
 
+            # skip books without cover
+            book_cover = book_info.get("imageLinks", None)
+            if not book_cover:
+                continue
+
             payload = create_payload(
                 book_info,
                 dup={
                     "category": category
                 }
             )
-            bresponse = requests.post(
+
+            # create new book
+            new_book_response = requests.post(
                 f"{BASE_BOOKSTORE_API_URL}/books/",
-                data=payload,
+                data=dumps(payload),
                 headers = {
                     "Content-type": "application/json",
                     "Authorization": f"JWT {tokens['access']}",
-                }
+                },
             )
-            print(bresponse.json())
+
+            new_book_id = new_book_response.json().get("id", None)
+
+            # add cover to new book
+            cover = resolve_img(
+                image_url=book_cover["thumbnail"],
+                file_name=payload["title"],
+                file_extension="jpeg",
+                tmp_dir=book_img_temp_dir
+            )
+
+            response = requests.patch(
+                f"{BASE_BOOKSTORE_API_URL}/books/{new_book_id}/",
+                files={
+                    "cover": (
+                        cover["img-name"],
+                        cover["content"],
+                        cover["file-extension"]
+                    )
+                },
+                headers = {
+                    "Authorization": f"JWT {tokens['access']}",
+                },
+            )
+            print(response.json())
+
+    book_img_temp_dir.cleanup()
