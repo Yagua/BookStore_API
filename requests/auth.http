@@ -1,6 +1,6 @@
 # Generate a JWT token
 
-POST http://localhost:80/api/v1/auth/jwt/create/
+POST http://localhost:80/api/v1/auth/login/
 Content-type: application/json
 
 #test user

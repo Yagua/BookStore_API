@@ -8,6 +8,7 @@ urlpatterns = [
     path("api/v1/", include("library.urls")),
     path("api/v1/auth/", include("djoser.urls")),
     path("api/v1/auth/", include("djoser.urls.jwt")),
+    path("api/v1/auth/login/", include("auth.urls")),
     path("api/v1/carts/", include("cart.urls")),
     path("api/v1/profile/", include("user_profile.urls")),
     path("api/v1/search/", include("search.urls")),
