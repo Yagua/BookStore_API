@@ -29,12 +29,15 @@ class SearchBook(GenericAPIView):
             )
 
             search = self.document_class.search().query(query)
-            response = search.execute()
+            response = search.to_queryset()
 
-            result = self.paginate_queryset(response)
-            serializers = self.serializer_class(result, many=True)
+            serializers = self.serializer_class(response, many=True)
+            return Response(serializers.data, status=status.HTTP_200_OK)
 
-            return self.get_paginated_response(serializers.data)
+            # get restult with pagination
+            # result = self.paginate_queryset(response)
+            # serializers = self.serializer_class(result, many=True)
+            # return self.get_paginated_response(serializers.data)
 
         except Exception as e:
             return Response({
