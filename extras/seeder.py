@@ -6,7 +6,7 @@ import re
 from json import dumps
 
 
-GB_BASE_API_URL = " https://www.googleapis.com/books/v1/volumes?maxResults=40&q=subject:"
+GB_BASE_API_URL = "https://www.googleapis.com/books/v1/volumes?maxResults=40&q=subject:"
 BASE_BOOKSTORE_API_URL = "http://localhost:80/api/v1"
 CATEGORIES = [
     "fiction",
@@ -83,7 +83,9 @@ def create_payload(json, dup):
       "publishier": "Unknown",
       "rating": random_float(1.2, 9.9),
       "available": True,
-      "categories": [dup["category"]],
+      "categories": [
+          {"name": dup["category"]}
+      ],
       "authors": ["Petter Galahat"],
     }
 
@@ -96,7 +98,8 @@ def create_payload(json, dup):
       "publishier": json.get("publisher", fallback["publishier"]),
       "rating": json.get("averageRating", fallback["rating"]),
       "available": True,
-      "categories": category_resolver(json.get("categories", fallback["categories"])),
+      "categories": fallback["categories"],
+      # "categories": category_resolver(json.get("categories", fallback["categories"])),
       "authors": author_resolver(json.get("authors", fallback["authors"])),
       "price": random_float(3.5, 20.4),
     }

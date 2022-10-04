@@ -31,6 +31,7 @@ class BookList(GenericAPIView):
         Create a new book
         """
 
+        print(request.data)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()

@@ -10,5 +10,5 @@ Authorization: JWT {{ACCESS_TOKEN}}
 
 ## Get all books related to an specific category
 
-GET http://localhost:80/api/v1/categories/1/books/
+GET http://localhost:80/api/v1/categories/2/books/
 Authorization: JWT {{ACCESS_TOKEN}}

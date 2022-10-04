@@ -9,14 +9,14 @@ POST http://localhost:80/api/v1/auth/users/
 Content-type: application/json
 
 {
-  "username": "test5",
-  "email": "test5@gamil.com",
-  "password": "testpassword",
-  "re_password": "testpassword",
-  "first_name": "Jose",
-  "second_name": "Eduardo",
-  "paternal_last_name": "Vega",
-  "maternal_last_name": "Castro"
+  "username": "mrfixthis",
+  "email": "fixthis@gmail.com",
+  "password": "fix12345678",
+  "re_password": "fix12345678",
+  "first_name": "Bryan",
+  "second_name": "Sneyder",
+  "paternal_last_name": "Baron",
+  "maternal_last_name": "Murcia"
 }
 
 ### GET current user
