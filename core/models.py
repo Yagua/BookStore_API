@@ -194,7 +194,7 @@ class ShoppingCartItem(models.Model):
     ShoppingCartItem model
     """
 
-    book = models.OneToOneField(Book, on_delete=models.SET_NULL, null=True)
+    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=1)
     date_added = models.DateTimeField(auto_now=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
