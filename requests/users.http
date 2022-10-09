@@ -27,18 +27,17 @@ Authorization: JWT {{ACCESS_TOKEN}}
 
 ## Update cuerrent user
 
-PUT http://localhost:8000/api/v1/auth/users/me/
+PATCH http://localhost:80/api/v1/auth/users/me/
 Content-type: application/json
 Authorization: JWT {{ACCESS_TOKEN}}
 
 {
-  "username": "Pache",
-  "email": "pache.vega@email.com",
-  "password": "poorpass",
-  "first_name": "Jose",
-  "second_name": "Eduardo",
-  "paternal_last_name": "Vega",
-  "maternal_last_name": "Castro"
+  "email": "yagua.db@gmail.com",
+  "first_name": "Dilan",
+  "maternal_last_name": "Murcia",
+  "paternal_last_name": "Baron",
+  "second_name": "Andres",
+  "username": "yagua"
 }
 
 ## Update partially current user

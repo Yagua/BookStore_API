@@ -1,13 +1,15 @@
 GET http://localhost:80/api/v1/profile/user/
 Authorization: JWT {{ACCESS_TOKEN}}
 
-PUT http://localhost:80/api/v1/profile/update/
+PATCH http://localhost:80/api/v1/profile/update/
 Authorization: JWT {{ACCESS_TOKEN}}
 
 {
-  "city": "Bogota",
-  "state_provice_region": "Bogota D.C",
-  "zip_code": "11898",
-  "phone": "3007028541",
-  "country": "United States"
+  "city": "New York",
+  "adress_line_1": "kra l19",
+  "adress_line_2": "apt 403",
+  "state_provice_region": "New York",
+  "zip_code": "23423",
+  "phone": "2342342342",
+  "country": "United States",
 }
