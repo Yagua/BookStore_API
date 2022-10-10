@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 from datetime import timedelta
+import environ
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,12 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
+#take variables from .env files
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, 'env/settings.env'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = (
-    "django-insecure-4vy59avqp+aw#1gc67#!rhzdm+@48l88&_sbopa*dd687tavxd"
+    env("SECRET_KEY")
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -89,11 +95,11 @@ WSGI_APPLICATION = "bookstore_app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "bookstore",
-        "USER": "dilanbaron",
-        "PASSWORD": "root",
-        "HOST": "mdb",
-        "PORT": "3306",
+        "NAME": env("MDB_DATABASE"),
+        "USER": env("MDB_USER"),
+        "PASSWORD": env("MDB_PASSWORD"),
+        "HOST": env("MDB_HOST"),
+        "PORT": env("MDB_PORT"),
     }
 }
 
@@ -148,6 +154,13 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "core.User"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
